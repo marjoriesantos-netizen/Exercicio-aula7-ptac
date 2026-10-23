@@ -1,13 +1,4 @@
-/* ==========================================================================
-   Lista 07 — Consumo de API
-   api.js — camada única de acesso à rede
 
-   Exercícios 1, 3, 4 e 5:
-   - BASE_URL, requisicao, apiGet, apiPost, apiPut, apiDelete;
-   - ApiError para respostas HTTP de erro;
-   - suporte a AbortSignal;
-   - merge dos headers padrão com os headers de cada chamada.
-   ========================================================================== */
 
 export const BASE_URL = 'https://jsonplaceholder.typicode.com';
 
@@ -16,11 +7,7 @@ const HEADERS_PADRAO = {
   Accept: 'application/json',
 };
 
-/**
- * Erro lançado quando a resposta HTTP não é bem-sucedida (resp.ok === false).
- * Guardar status e statusText permite que a interface mostre uma mensagem
- * específica para cada caso (404, 500 etc.).
- */
+
 export class ApiError extends Error {
   constructor(status, statusText, corpo = null) {
     super(statusText || `Erro HTTP ${status}`);
@@ -31,10 +18,7 @@ export class ApiError extends Error {
   }
 }
 
-/**
- * Aceita um objeto simples, um Headers ou uma lista de pares [nome, valor]
- * e devolve sempre um objeto simples.
- */
+
 function normalizarHeaders(headers) {
   if (!headers) {
     return {};
@@ -58,13 +42,6 @@ function normalizarHeaders(headers) {
 
   throw new TypeError('headers deve ser um objeto, um Headers ou uma lista de pares');
 }
-
-/**
- * Mescla os headers padrão com os headers da chamada.
- * A comparação é feita sem diferenciar maiúsculas de minúsculas, então
- * { 'content-type': '...' } substitui o Content-Type padrão em vez de
- * enviar o mesmo header duas vezes.
- */
 function mesclarHeaders(...listas) {
   const resultado = {};
   const nomesUsados = new Map();
@@ -117,7 +94,6 @@ export async function requisicao(endpoint, opcoes = {}) {
   const headers = mesclarHeaders(HEADERS_PADRAO, headersDaChamada);
   const config = { ...restoDasOpcoes, headers };
 
-  // Exercício 4: o signal precisa chegar intacto ao fetch.
   if (signal) {
     config.signal = signal;
   }
